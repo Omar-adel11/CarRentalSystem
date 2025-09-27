@@ -101,7 +101,7 @@ namespace CarRentalSystem.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute]int? id, CarDTO _cardto)
+        public IActionResult Edit([FromRoute] int? id, CarDTO _cardto)
         {
             if (ModelState.IsValid) //server-side validation
             {
