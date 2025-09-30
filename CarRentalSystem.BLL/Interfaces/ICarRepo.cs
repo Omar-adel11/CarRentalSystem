@@ -14,6 +14,8 @@ namespace CarRentalSystem.BLL.Interfaces
         int AddCar(Car model);
         int RemoveCar(Car model);
         int UpdateCar(Car model);
+
+        List<Car> GetCarByModel(string name);
         
     }
 }

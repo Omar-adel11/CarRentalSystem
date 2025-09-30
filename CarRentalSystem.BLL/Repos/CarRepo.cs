@@ -46,5 +46,10 @@ namespace CarRentalSystem.BLL.Repos
             _context.Update(model);
             return _context.SaveChanges();
         }
+
+        public List<Car> GetCarByModel(string name)
+        {
+            return _context.Cars.Where(c=>c.Model.ToLower().Contains(name.ToLower())).ToList();
+        }
     }
 }

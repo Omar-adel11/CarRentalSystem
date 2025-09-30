@@ -15,10 +15,19 @@ namespace CarRentalSystem.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(string? SearchInput)
         {
-            var Cars = _carRepo.GetAllCars();
-            return View(Cars);
+            IEnumerable<Car> cars;
+            if(SearchInput is null)
+            {
+                 cars = _carRepo.GetAllCars();
+
+            }
+            else
+            {
+                 cars = _carRepo.GetCarByModel(SearchInput);
+            }
+                return View(cars);
         }
 
         [HttpPost]
