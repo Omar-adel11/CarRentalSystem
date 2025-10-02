@@ -8,10 +8,10 @@ namespace CarRentalSystem.PL.Controllers
 {
     public class CarController : Controller
     {
-        private readonly ICarRepo _carRepo;
-        public CarController(ICarRepo carRepo)
+        private readonly IUnitOfWork _unitOfWork;
+        public CarController(IUnitOfWork UnitOfWork)
         {
-            _carRepo = carRepo;
+            _unitOfWork = UnitOfWork;
         }
 
         [HttpGet]
@@ -20,12 +20,12 @@ namespace CarRentalSystem.PL.Controllers
             IEnumerable<Car> cars;
             if(SearchInput is null)
             {
-                 cars = _carRepo.GetAllCars();
+                 cars = _unitOfWork.carRepo.GetAllCars();
 
             }
             else
             {
-                 cars = _carRepo.GetCarByModel(SearchInput);
+                 cars = _unitOfWork.carRepo.GetCarByModel(SearchInput);
             }
                 return View(cars);
         }
@@ -52,7 +52,7 @@ namespace CarRentalSystem.PL.Controllers
                     IsAvailable = _carDTO.IsAvailable
                 };
 
-                var count = _carRepo.AddCar(car);
+                var count = _unitOfWork.carRepo.AddCar(car);
 
                 if (count > 0)
                 {
@@ -67,8 +67,8 @@ namespace CarRentalSystem.PL.Controllers
         {
             if (id == null) 
                 return BadRequest("Invalid Id");
-            var car = _carRepo.GetCarById(id.Value);
-            var count = _carRepo.RemoveCar(car);
+            var car = _unitOfWork.carRepo.GetCarById(id.Value);
+            var count = _unitOfWork.carRepo.RemoveCar(car);
             if(count > 0)
             {
                 return RedirectToAction(nameof(Index));
@@ -82,7 +82,7 @@ namespace CarRentalSystem.PL.Controllers
         {
             if (id == null)
                 return BadRequest("Invalid Id");
-            var car = _carRepo.GetCarById(id.Value);
+            var car = _unitOfWork.carRepo.GetCarById(id.Value);
             if (car == null)
                 return NotFound();
             return View(car);
@@ -93,7 +93,7 @@ namespace CarRentalSystem.PL.Controllers
         {
             if (id == null)
                 return BadRequest("Invalid Id");
-            var car = _carRepo.GetCarById(id.Value);
+            var car = _unitOfWork.carRepo.GetCarById(id.Value);
             if (car == null)
                 return NotFound();
             var cardto = new CarDTO()
@@ -125,7 +125,7 @@ namespace CarRentalSystem.PL.Controllers
                     IsAvailable = _cardto.IsAvailable
                 };
 
-                var count = _carRepo.UpdateCar(car);
+                var count = _unitOfWork.carRepo.UpdateCar(car);
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));
