@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CarRentalSystem.BLL.Interfaces;
 using CarRentalSystem.DAL.Data.Contexts;
 using CarRentalSystem.DAL.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalSystem.BLL.Repos
 {
@@ -17,39 +18,39 @@ namespace CarRentalSystem.BLL.Repos
             _context = context;
         }
 
-        public List<Car> GetAllCars()
+        public async Task<List<Car>> GetAllCarsAsync()
         {
-            var cars = _context.Cars.ToList();
+            var cars = await _context.Cars.ToListAsync();
             return cars;
         }
 
-        public Car GetCarById(int id)
+        public async Task<Car> GetCarByIdAsync(int id)
         {
-            var car = _context.Cars.Find(id);
+            var car = await _context.Cars.FindAsync(id);
             return car;
         }
 
     
-        public int AddCar(Car model)
+        public async Task AddCarAsync(Car model)
         {
-            _context.Add(model);
-            return _context.SaveChanges();
+            await _context.AddAsync(model);
+            
         }
-        public int RemoveCar(Car model)
+        public void RemoveCar(Car model)
         {
             _context.Remove(model);
-            return _context.SaveChanges();
+            
         }
 
-        public int UpdateCar(Car model)
+        public void UpdateCar(Car model)
         {
             _context.Update(model);
-            return _context.SaveChanges();
+            
         }
 
-        public List<Car> GetCarByModel(string name)
+        public async Task<List<Car>> GetCarByModelAsync(string name)
         {
-            return _context.Cars.Where(c=>c.Model.ToLower().Contains(name.ToLower())).ToList();
+            return await _context.Cars.Where(c=>c.Model.ToLower().Contains(name.ToLower())).ToListAsync();
         }
     }
 }

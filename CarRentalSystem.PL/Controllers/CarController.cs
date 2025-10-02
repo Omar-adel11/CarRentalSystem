@@ -15,17 +15,17 @@ namespace CarRentalSystem.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? SearchInput)
+        public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<Car> cars;
             if(SearchInput is null)
             {
-                 cars = _unitOfWork.carRepo.GetAllCars();
+                 cars = await _unitOfWork.carRepo.GetAllCarsAsync();
 
             }
             else
             {
-                 cars = _unitOfWork.carRepo.GetCarByModel(SearchInput);
+                 cars = await _unitOfWork.carRepo.GetCarByModelAsync(SearchInput);
             }
                 return View(cars);
         }
@@ -38,7 +38,7 @@ namespace CarRentalSystem.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add(CarDTO _carDTO)
+        public async Task<IActionResult> Add(CarDTO _carDTO)
         {
             if (ModelState.IsValid) //server-side validation
             {
@@ -52,7 +52,8 @@ namespace CarRentalSystem.PL.Controllers
                     IsAvailable = _carDTO.IsAvailable
                 };
 
-                var count = _unitOfWork.carRepo.AddCar(car);
+                await _unitOfWork.carRepo.AddCarAsync(car);
+                var count = await _unitOfWork.CompleteAsync();
 
                 if (count > 0)
                 {
@@ -63,13 +64,15 @@ namespace CarRentalSystem.PL.Controllers
             return View(_carDTO);
         }
         [HttpGet]
-        public IActionResult Delete(int? id)
+        public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) 
                 return BadRequest("Invalid Id");
-            var car = _unitOfWork.carRepo.GetCarById(id.Value);
-            var count = _unitOfWork.carRepo.RemoveCar(car);
-            if(count > 0)
+            var car = await _unitOfWork.carRepo.GetCarByIdAsync(id.Value);
+            _unitOfWork.carRepo.RemoveCar(car);
+            var count = await _unitOfWork.CompleteAsync();
+
+            if (count > 0)
             {
                 return RedirectToAction(nameof(Index));
             }
@@ -78,22 +81,22 @@ namespace CarRentalSystem.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
                 return BadRequest("Invalid Id");
-            var car = _unitOfWork.carRepo.GetCarById(id.Value);
+            var car = await _unitOfWork.carRepo.GetCarByIdAsync(id.Value);
             if (car == null)
                 return NotFound();
             return View(car);
         }
 
         [HttpGet]
-        public IActionResult Edit(int? id)
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
                 return BadRequest("Invalid Id");
-            var car = _unitOfWork.carRepo.GetCarById(id.Value);
+            var car = await _unitOfWork.carRepo.GetCarByIdAsync(id.Value);
             if (car == null)
                 return NotFound();
             var cardto = new CarDTO()
@@ -110,7 +113,7 @@ namespace CarRentalSystem.PL.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([FromRoute] int? id, CarDTO _cardto)
+        public async Task<IActionResult> Edit([FromRoute] int? id, CarDTO _cardto)
         {
             if (ModelState.IsValid) //server-side validation
             {
@@ -125,7 +128,9 @@ namespace CarRentalSystem.PL.Controllers
                     IsAvailable = _cardto.IsAvailable
                 };
 
-                var count = _unitOfWork.carRepo.UpdateCar(car);
+                 _unitOfWork.carRepo.UpdateCar(car);
+                var count = await _unitOfWork.CompleteAsync();
+
                 if (count > 0)
                 {
                     return RedirectToAction(nameof(Index));

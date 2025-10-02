@@ -9,13 +9,13 @@ namespace CarRentalSystem.BLL.Interfaces
 {
     public interface ICarRepo
     {
-        List<Car> GetAllCars();
-        Car GetCarById(int id);
-        int AddCar(Car model);
-        int RemoveCar(Car model);
-        int UpdateCar(Car model);
+        Task<List<Car>> GetAllCarsAsync();
+        Task<Car> GetCarByIdAsync(int id);
+        Task AddCarAsync(Car model);
+        void RemoveCar(Car model);
+        void UpdateCar(Car model);
 
-        List<Car> GetCarByModel(string name);
+        Task<List<Car>> GetCarByModelAsync(string name);
         
     }
 }
