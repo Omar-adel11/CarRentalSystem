@@ -16,6 +16,10 @@ namespace CarRentalSystem.DAL.Models
         public decimal RentPricePerDay { get; set; }
         public bool IsAvailable { get; set; }
 
+        public string? ImageName { get; set; }
+
+        
+
     }
 
 }

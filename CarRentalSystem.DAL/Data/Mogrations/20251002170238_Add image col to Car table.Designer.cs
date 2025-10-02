@@ -3,6 +3,7 @@ using CarRentalSystem.DAL.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CarRentalSystem.DAL.Data.Mogrations
 {
     [DbContext(typeof(CarDbContexts))]
-    partial class CarDbContextsModelSnapshot : ModelSnapshot
+    [Migration("20251002170238_Add image col to Car table")]
+    partial class AddimagecoltoCartable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

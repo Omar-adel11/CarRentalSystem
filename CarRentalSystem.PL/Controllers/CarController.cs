@@ -4,6 +4,7 @@ using CarRentalSystem.DAL.Models;
 //using CarRentalSystem.PL.CarDTO;
 using Microsoft.AspNetCore.Mvc;
 using CarRentalSystem.PL.DTO;
+using CarRentalSystem.PL.Services;
 namespace CarRentalSystem.PL.Controllers
 {
     public class CarController : Controller
@@ -30,18 +31,25 @@ namespace CarRentalSystem.PL.Controllers
                 return View(cars);
         }
 
-        [HttpPost]
+        [HttpGet]
         public IActionResult Add()
         {
 
             return View();
         }
 
-        [HttpGet]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Add(CarDTO _carDTO)
         {
             if (ModelState.IsValid) //server-side validation
             {
+                if (_carDTO.ImageFile is not null)
+                {
+                    _carDTO.ImageName = DocumentSettings.UploadFile(_carDTO.ImageFile, "images");
+                }
+
+
                 var car = new Car()
                 {
                     Make = _carDTO.Make,
@@ -49,7 +57,9 @@ namespace CarRentalSystem.PL.Controllers
                     Year = _carDTO.Year,
                     Color = _carDTO.Color,
                     RentPricePerDay = _carDTO.RentPricePerDay,
-                    IsAvailable = _carDTO.IsAvailable
+                    IsAvailable = _carDTO.IsAvailable,
+                    ImageName = _carDTO.ImageName
+
                 };
 
                 await _unitOfWork.carRepo.AddCarAsync(car);
@@ -69,6 +79,12 @@ namespace CarRentalSystem.PL.Controllers
             if (id == null) 
                 return BadRequest("Invalid Id");
             var car = await _unitOfWork.carRepo.GetCarByIdAsync(id.Value);
+
+            if(car.ImageName is not null)
+            {
+                DocumentSettings.DeleteFile(car.ImageName, "images");
+            }
+
             _unitOfWork.carRepo.RemoveCar(car);
             var count = await _unitOfWork.CompleteAsync();
 
@@ -99,6 +115,9 @@ namespace CarRentalSystem.PL.Controllers
             var car = await _unitOfWork.carRepo.GetCarByIdAsync(id.Value);
             if (car == null)
                 return NotFound();
+
+            
+
             var cardto = new CarDTO()
             {
                 Make = car.Make,
@@ -106,7 +125,9 @@ namespace CarRentalSystem.PL.Controllers
                 Year = car.Year,
                 Color = car.Color,
                 RentPricePerDay = car.RentPricePerDay,
-                IsAvailable = car.IsAvailable
+                IsAvailable = car.IsAvailable,
+                ImageName = car.ImageName
+
             };
             return View(cardto);
         }
@@ -117,6 +138,16 @@ namespace CarRentalSystem.PL.Controllers
         {
             if (ModelState.IsValid) //server-side validation
             {
+                if(_cardto.ImageName is not null && _cardto.ImageFile is not null)
+                {
+                    DocumentSettings.DeleteFile(_cardto.ImageName, "images");
+                }
+
+                if(_cardto.ImageFile is not null)
+                {
+                    _cardto.ImageName = DocumentSettings.UploadFile(_cardto.ImageFile, "images");
+                }
+
                 var car = new Car()
                 {
                     Id = id.Value,
@@ -125,7 +156,8 @@ namespace CarRentalSystem.PL.Controllers
                     Year = _cardto.Year,
                     Color = _cardto.Color,
                     RentPricePerDay = _cardto.RentPricePerDay,
-                    IsAvailable = _cardto.IsAvailable
+                    IsAvailable = _cardto.IsAvailable,
+                    ImageName = _cardto.ImageName
                 };
 
                  _unitOfWork.carRepo.UpdateCar(car);

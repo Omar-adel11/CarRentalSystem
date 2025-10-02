@@ -15,5 +15,9 @@ namespace CarRentalSystem.PL.DTO
         [Required(ErrorMessage = "This is Required!")]
         public decimal RentPricePerDay { get; set; }
         public bool IsAvailable { get; set; }
+
+        public string? ImageName { get; set; }
+
+        public IFormFile? ImageFile { get; set; }
     }
 }
