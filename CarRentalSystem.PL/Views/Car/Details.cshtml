@@ -1,39 +1,49 @@
 ﻿@model Car
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Car Details";
 }
 
-<h1>Details</h1>
+<div class="container mt-5">
+    <h1>Details for @Model.Make @Model.Model</h1>
+    <hr style="border-color: #333;" />
 
-<table class="table table-hover table-striped">
-    <thead>
-        <tr>
-			<th>Image</th>
-            <th>Id</th>
-            <th>Make</th>
-            <th>Model</th>
-            <th>Year</th>
-            <th>Color</th>
-            <th>Daily Rate</th>
-            <th>Is Available</th>
-
-        </tr>
-    </thead>
-    <tbody>
-        
-            <tr>
-            <td><img src="~/files/images/@Model.ImageName" width="100" height="100" class="img-fluid rounded-circle" /></td>
-            <td>@Model.Id</td>
-            <td>@Model.Make</td>
-            <td>@Model.Model</td>
-            <td>@Model.Year</td>
-            <td>@Model.Color</td>
-            <td>@Model.RentPricePerDay.ToString("C")</td>
-            <td>@(Model.IsAvailable ? "Yes" : "No")</td>
-            
-            <td><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-outline-primary">Edit</a></td>
-            <td><a asp-action="Index"  class="btn btn-light">Back to List</a></td>
-            </tr>
-        
-    </tbody>
-</table>
+    <div class="row mt-4">
+        <div class="col-md-5">
+            <img src="~/files/images/@Model.ImageName" class="img-fluid rounded" alt="@Model.Model" />
+        </div>
+        <div class="col-md-7">
+            <table class="table table-hover mt-3 mt-md-0">
+                <tbody>
+                    <tr>
+                        <th scope="row">Make</th>
+                        <td>@Model.Make</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Model</th>
+                        <td>@Model.Model</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Year</th>
+                        <td>@Model.Year</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Color</th>
+                        <td>@Model.Color</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Daily Rate</th>
+                        <td>@Model.RentPricePerDay.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Availability</th>
+                        <td>@(Model.IsAvailable ? "Available" : "Not Available")</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="mt-4">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+                <a asp-action="Index" class="btn btn-outline-light">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>

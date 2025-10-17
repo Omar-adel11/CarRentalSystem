@@ -1,24 +1,22 @@
 ﻿@model CarDTO
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Edit Car";
 }
 
-<h1>Edit</h1>
+<div class="container mt-5" style="max-width: 800px;">
+    <h1>Edit Car</h1>
+    <hr style="border-color: #333;" />
 
-<br/>
-<br/>
+    <form asp-action="Edit" enctype="multipart/form-data" class="mt-4">
+        <partial name="PartialViews/AddEditPartialView" />
+        <input hidden asp-for="ImageName" />
+        <div class="my-3 form-group">
+            <input type="submit" value="Save Changes" class="btn btn-primary px-4" />
+            <a asp-action="Index" asp-controller="Car" class="btn btn-outline-light">Back to List</a>
+        </div>
+    </form>
+</div>
 
-<form asp-action="Edit" enctype="multipart/form-data">
-    <partial name="PartialViews/AddEditPartialView" />
-	<input hidden asp-for="ImageName" />
-    <div class="my-3 form-group">
-        <input type="submit" value="Save"  class="btn btn-primary" />
-        <a asp-action="Index" asp-controller="Car" class="btn btn-light">Back to cars list</a>
-    </div>
-</form>
-
-@section validation {
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
-

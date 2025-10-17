@@ -1,52 +1,339 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CarRentalSystem.PL</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/CarRentalSystem.PL.styles.css" asp-append-version="true" />
+    <title>@ViewData["Title"] ?? "TrustRide | Car Rentals"</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+        main {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100svh;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+            .hero h1 {
+                font-weight: 600;
+                font-size: clamp(2.5rem, 5vw, 3.5rem);
+            }
+
+                .hero h1 span {
+                    color: #00ff48;
+                }
+
+            .hero p {
+                font-size: 1.1rem;
+                color: #d3d3d3;
+                max-width: 750px;
+                margin-top: 1.5rem;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+        /* Car Card Styling */
+        .car-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .car-card {
+            background-color: #1a1a1a;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            color: #fff;
+            border: 1px solid #333;
+        }
+
+        .car-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+            .car-card-header h5 {
+                font-weight: 600;
+                margin: 0;
+            }
+
+            .car-card-header .car-type {
+                color: #00ff48;
+                font-size: 0.9rem;
+            }
+
+        .car-card-img {
+            width: 100%;
+            height: 150px;
+            object-fit: contain;
+            margin: 1rem 0;
+        }
+
+        .car-card-footer {
+            border-top: 1px solid #333;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .car-card-actions a {
+            margin-left: 0.5rem;
+        }
+
+        /* General Form & Table Styling */
+        h1 {
+            font-weight: 600;
+        }
+
+        .form-control, .form-check-input {
+            background-color: #2a2a2a;
+            color: #fff;
+            border: 1px solid #555;
+        }
+
+            .form-control:focus {
+                background-color: #2a2a2a;
+                color: #fff;
+                border-color: #00ff48;
+                box-shadow: 0 0 0 0.25rem rgba(0, 255, 72, 0.25);
+            }
+
+            .form-check-input:checked {
+                background-color: #00ff48;
+                border-color: #00ff48;
+            }
+
+        /* Button Overrides */
+        .btn-primary {
+            background-color: #00b333;
+            border-color: #00b333;
+        }
+
+            .btn-primary:hover {
+                background-color: #00ff48;
+                border-color: #00ff48;
+            }
+
+        .btn-success {
+            background-color: #007bff; /* Details button */
+        }
+
+        /* Themed Table */
+        .table th, .table td {
+            color: #fff; /* Force all table cells to have white text */
+        }
+
+        .table > :not(caption) > * > * {
+            background-color: transparent;
+            border-bottom-width: 1px;
+            border-color: #333;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: transparent;
+            padding: 1rem 2rem;
+            border-bottom: 2px solid #00ff48;
+        }
+
+        .navbar-brand img {
+            height: 40px;
+        }
+
+        .nav-link {
+            color: white !important;
+            margin: 0 0.5rem;
+        }
+
+            .nav-link.active, .nav-link:hover {
+                color: #00ff48 !important;
+            }
+
+        /* --- UPDATED SEARCH STYLES --- */
+        .search-container {
+            display: flex;
+            align-items: center;
+            border: 1px solid white;
+            border-radius: 20px;
+            padding: 0.2rem 0.2rem 0.2rem 0.8rem; /* Padding for the container */
+            background: transparent;
+        }
+
+        .search-input {
+            background: transparent !important;
+            border: none !important;
+            color: white !important;
+            outline: none !important;
+            box-shadow: none !important; /* Remove Bootstrap's focus glow */
+            width: 150px; /* Increased width */
+            padding: 0;
+        }
+
+            .search-input::placeholder {
+                color: #aaa;
+            }
+
+        .btn-search {
+            background-color: #00ff48;
+            color: #000;
+            border: none;
+            border-radius: 50%; /* Make it circular */
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            transition: background-color 0.2s ease;
+        }
+
+            .btn-search:hover {
+                background-color: #00cc3c;
+                color: #000;
+            }
+        /* --- END OF SEARCH STYLES --- */
+
+        /* Footer */
+        footer {
+            border-top: 1px solid #00ff48;
+            padding: 2rem 0;
+        }
+
+        .footer-logo img {
+            height: 40px;
+        }
+
+        /* Improved Footer Text Styling */
+        footer h5 {
+            color: #00ff48;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        footer .list-unstyled li {
+            margin-bottom: 0.5rem;
+        }
+
+        footer a {
+            color: #d3d3d3;
+            text-decoration: none;
+            transition: color 0.2s ease-in-out;
+        }
+
+            footer a:hover {
+                color: #00ff48;
+            }
+
+        footer .text-muted {
+            margin-top: 2rem !important;
+        }
+
+
+        @@media (max-width: 768px) {
+            .car-card {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">CarRentalSystem.PL</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Car" asp-action="Index">Cars</a>
-                        </li>
+    <!-- 🌐 Navbar -->
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand text-white" asp-controller="Home" asp-action="Index">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Car_icon.svg/1024px-Car_icon.svg.png" alt=""> TrustRide
+            </a>
+            <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Profile" asp-action="Index">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Car" asp-action="Index">Cars</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
+                </ul>
+                <!-- === UPDATED SEARCH FORM === -->
+                <form asp-controller="Car" asp-action="Index" method="get" class="d-flex">
+                    <div class="search-container ms-3">
+                        <input name="SearchInput" class="form-control search-input" type="text" placeholder="Search by model...">
+                        <button type="submit" class="btn btn-search">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 🧱 Page Body -->
+    <main role="main">
+        @RenderBody()
+    </main>
+
+    <!-- 🦶 Footer -->
+    <footer>
+        <div class="container">
+            <div class="row text-center text-md-start">
+                <div class="col-md-3 mb-3 footer-logo">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Car_icon.svg/1024px-Car_icon.svg.png" alt=""> TrustRide
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h5>Home</h5>
+                    <ul class="list-unstyled">
+                        <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
+                        <li><a asp-controller="About" asp-action="Index">About</a></li>
+                        <li><a asp-controller="Car" asp-action="Index">Cars</a></li>
+                        <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h5>Socials</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <h5>FAQ</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">Account</a></li>
+                        <li><a href="#">Payments</a></li>
+                        <li><a href="#">Booking</a></li>
+                        <li><a href="#">Support</a></li>
                     </ul>
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - CarRentalSystem.PL - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <div class="text-center text-muted mt-3">
+                Website Designed by <strong>Eng. Kenzy Eslam</strong>
+            </div>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("validation", required: false)
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
+
