@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "About Us";
+}
+
+
+<style>
+    /* =====================
+       LOGO SCROLLER STYLES
+    ===================== */
+
+    .logo-scroller {
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+    }
+
+    .logo-scroller-inner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: scroll-logos 35s linear infinite;
+        width: max-content;
+    }
+
+        .logo-scroller-inner img {
+            height: 50px;
+            filter: grayscale(1) brightness(1.2) contrast(1.1);
+            margin: 0 2rem;
+            opacity: 0.9;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+            .logo-scroller-inner img:hover {
+                filter: brightness(1.8);
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+    @@keyframes scroll-logos {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(-50%);
+        }
+    }
+</style>
+
+<!-- Hero Section with Background Image -->
+<section class="about-hero" style="background-image: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('/PhotosForTheView/BackgroundCar.jpg');">
+    <h1>Your Trusted <span>R</span>oad to Freedom</h1>
+    <p>Every ride begins with trust – we're here to take you further</p>
+</section>
+
+<!-- A Ride Built on Trust Section with Image Beside Text -->
+<section class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <h2 class="section-title">A <span>R</span>ide Built on <span>T</span>rust Since Day One</h2>
+                <p class="text-white-50 lead">
+                    Our journey started with a simple vision: to make car rentals reliable, affordable, and trustworthy. Over time, that vision turned into reality as we became a trusted road partner for thousands of travelers. Every ride we provide is built on the same promise we began with — trust on the road, comfort in the ride.
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <img src="~/PhotosForTheView/BlackCarInTheGarage.png" class="img-fluid about-section-image" alt="Car in a dark garage">
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Car Brands Section -->
+<section class="about-section text-center bg-dark">
+    <div class="container">
+        <p class="text-white-50">We Deal With All Car Brands</p>
+        <h2 class="section-title"><span>R</span>ide with <span>T</span>rust, Drive with Confidence</h2>
+    </div>
+    <div class="logo-scroller">
+        <div class="logo-scroller-inner">
+            <img src="https://cdn.worldvectorlogo.com/logos/audi-11.svg" alt="Audi logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/bmw-8.svg" alt="BMW logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/mercedes-benz-9.svg" alt="Mercedes logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/tesla-9.svg" alt="Tesla logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/audi-11.svg" alt="Audi logo">
+            <img src="https://www.svgrepo.com/show/446925/skoda.svg" alt="Škoda logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/renault-5.svg" alt="Renault logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/toyota-4.svg" alt="Toyota logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/hyundai-1.svg" alt="Hyundai logo">
+            <img src="https://cdn.worldvectorlogo.com/logos/ford-8.svg" alt="Ford logo">
+        </div>
+    </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section" style="background-image: url('https://images.unsplash.com/photo-1532367988304-44a1380965d4?q=80&w=1974&auto=format&fit=crop');">
+    <div class="container">
+        <h2 class="section-title text-center">The <span>R</span>oad of <span>T</span>rust in Numbers</h2>
+        <div class="row g-4 mt-5">
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-car-alt"></i></div>
+                    <h3>10,000+</h3>
+                    <p>Rides Trusted</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-globe-americas"></i></div>
+                    <h3>50+</h3>
+                    <p>Trusted Roads</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-star"></i></div>
+                    <h3>95%</h3>
+                    <p>Customer Trust</p>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6">
+                <div class="stat-card">
+                    <div class="icon"><i class="fas fa-clock"></i></div>
+                    <h3>2-min</h3>
+                    <p>Booking</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

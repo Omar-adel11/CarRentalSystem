@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Cars";
+	Layout = "_Layout";
 }
 
 <div class="container mt-5">
@@ -14,7 +15,9 @@
         </div>
     </div>
 
-    <div class="row">
+
+
+    <div id="CarsContainer"  class="row">
         @if (Model.Any())
         {
             @foreach (var car in Model)

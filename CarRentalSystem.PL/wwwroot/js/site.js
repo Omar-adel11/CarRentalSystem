@@ -1,31 +1,31 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿document.addEventListener("DOMContentLoaded", () => {
+    const inputSearch = document.getElementById("SearchInput");
+    if (!inputSearch) return;
 
-// Write your JavaScript code.
+    let typingTimer;
+    const delay = 300; // ms delay before firing search
 
-let inputSearch = document.getElementById("SearchInput");
+    inputSearch.addEventListener("keyup", () => {
+        clearTimeout(typingTimer);
+        typingTimer = setTimeout(() => {
+            const query = inputSearch.value.trim();
+            const url = `/Car/Index?SearchInput=${encodeURIComponent(query)}`;
 
-// Listen to every key typed
-inputSearch.addEventListener("keyup", () => {
-    let query = inputSearch.value;
+            fetch(url)
+                .then(res => res.text())
+                .then(html => {
+                    const parser = new DOMParser();
+                    const doc = parser.parseFromString(html, "text/html");
+                    const newCars = doc.querySelector("#CarsContainer");
+                    const container = document.querySelector("#CarsContainer");
 
-    let xhr = new XMLHttpRequest();
-    let url = `/Car/Index?SearchInput=${encodeURIComponent(query)}`;
-    xhr.open("GET", url, true);
-
-    xhr.onreadystatechange = function () {
-        if (this.readyState === 4 && this.status === 200) {
-            // Replace the table body with the new filtered result
-            let parser = new DOMParser();
-            let doc = parser.parseFromString(this.responseText, "text/html");
-
-            // Get the new table or empty message from the response
-            let newTable = doc.querySelector("table");
-            let container = document.querySelector("#CarsContainer");
-
-            container.innerHTML = newTable ? newTable.outerHTML : "<div class='alert alert-info'>No Cars Found</div>";
-        }
-    };
-
-    xhr.send();
+                    if (container && newCars) {
+                        container.innerHTML = newCars.innerHTML;
+                    } else if (container) {
+                        container.innerHTML = "<div class='alert alert-info text-center'>No cars found.</div>";
+                    }
+                })
+                .catch(err => console.error("Error:", err));
+        }, delay);
+    });
 });

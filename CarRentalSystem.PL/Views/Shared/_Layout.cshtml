@@ -13,13 +13,60 @@
             background-color: #000;
             color: #fff;
             font-family: 'Segoe UI', Tahoma, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
+        /* UPDATED: Removed flex centering to allow pages to scroll naturally */
         main {
+            flex: 1; /* This remains to push the footer down */
+        }
+
+        .home-hero-container {
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('/PhotosForTheView/HomepageCar.jpg') center/cover no-repeat;
+            color: #fff;
+            min-height: 80vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+        }
+
+            .home-hero-container h1 {
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+
+            .home-hero-container span {
+                color: #00ff48;
+            }
+
+            .home-hero-container p {
+                max-width: 600px;
+                margin-top: 1rem;
+                font-size: 1.1rem;
+            }
+
+        @@media (max-width: 768px) {
+            .home-hero-container h1
+
+        {
+            font-size: 2rem;
+        }
+
+        .home-hero-container p {
+            font-size: 1rem;
+        }
+
+        }
+        /* Centering container specifically for the Home page hero */
+        .home-hero-container {
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 100svh;
         }
 
         /* Hero Section */
@@ -29,8 +76,9 @@
         }
 
             .hero h1 {
-                font-weight: 600;
-                font-size: clamp(2.5rem, 5vw, 3.5rem);
+                font-weight: bold;
+                white-space: nowrap;
+                font-size: clamp(1.8rem, 4vw, 3.2rem);
             }
 
                 .hero h1 span {
@@ -41,7 +89,7 @@
                 font-size: 1.1rem;
                 color: #d3d3d3;
                 max-width: 750px;
-                margin-top: 1.5rem;
+                margin-top: 1rem;
                 margin-left: auto;
                 margin-right: auto;
             }
@@ -149,6 +197,176 @@
             border-color: #333;
         }
 
+        /* --- ABOUT PAGE STYLES --- */
+        .about-hero {
+            height: 80vh; /* Increased height for better effect */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+            .about-hero h1 {
+                font-size: clamp(3rem, 6vw, 4.5rem);
+                font-weight: 700;
+            }
+
+            .about-hero p {
+                font-size: 1.2rem;
+                color: #e0e0e0;
+            }
+
+            .about-hero span, .section-title span {
+                color: #00ff48;
+            }
+
+        .about-section {
+            padding: 6rem 0;
+            position: relative;
+        }
+
+        .about-section-image {
+            border-radius: 15px;
+        }
+
+        /* Removed background-specific styles from here */
+        .section-with-bg {
+            background-size: cover;
+            background-position: center;
+        }
+
+            .section-with-bg::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.85);
+                z-index: 1;
+            }
+
+            .section-with-bg .container {
+                position: relative;
+                z-index: 2;
+            }
+
+        .section-title {
+            font-size: 2.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .logo-scroller {
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            padding: 2rem 0;
+        }
+
+            .logo-scroller::before,
+            .logo-scroller::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                width: 100px;
+                height: 100%;
+                z-index: 2;
+            }
+
+            .logo-scroller::before {
+                left: 0;
+                background: linear-gradient(to left, rgba(0,0,0,0), #000);
+            }
+
+            .logo-scroller::after {
+                right: 0;
+                background: linear-gradient(to right, rgba(0,0,0,0), #000);
+            }
+
+        .logo-scroller-inner {
+            display: inline-block;
+            white-space: nowrap;
+            animation: scroll-logos 40s linear infinite;
+        }
+
+            .logo-scroller-inner img {
+                height: 35px;
+                filter: grayscale(1) brightness(10);
+                margin: 0 2rem;
+                opacity: 0.8;
+            }
+
+        @@keyframes scroll-logos {
+            from {
+                transform: translateX(0);
+            }
+
+            to {
+                transform: translateX(-50%);
+            }
+        }
+
+        .stats-section {
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 5rem 0;
+        }
+
+            .stats-section::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: rgba(0,0,0,0.8);
+            }
+
+            .stats-section .container {
+                position: relative;
+                z-index: 2;
+            }
+
+        .stat-card {
+            background-color: rgba(30,30,30,0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            border: 2px solid #444; /* Standard border */
+            height: 100%;
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease-in-out; /* Smooth transition for hover */
+        }
+            /* UPDATED: Hover effect for ALL stat cards */
+            .stat-card:hover {
+                border-color: #00ff48;
+                transform: translateY(-5px); /* Add a subtle lift effect */
+                box-shadow: 0 0 20px rgba(0,255,72,0.3);
+            }
+
+            .stat-card .icon {
+                font-size: 3rem;
+                margin-bottom: 1rem;
+                color: #fff;
+            }
+
+            .stat-card h3 {
+                font-size: 2.2rem;
+                font-weight: 700;
+            }
+
+            .stat-card p {
+                color: #ccc;
+                font-size: 1.1rem;
+            }
+        /* --- END ABOUT PAGE STYLES --- */
+
         /* Navbar */
         .navbar {
             background-color: transparent;
@@ -169,49 +387,37 @@
                 color: #00ff48 !important;
             }
 
-        /* --- UPDATED SEARCH STYLES --- */
-        .search-container {
+        /* Updated Search Box */
+        .search-form {
             display: flex;
             align-items: center;
-            border: 1px solid white;
-            border-radius: 20px;
-            padding: 0.2rem 0.2rem 0.2rem 0.8rem; /* Padding for the container */
-            background: transparent;
         }
 
         .search-input {
-            background: transparent !important;
-            border: none !important;
-            color: white !important;
-            outline: none !important;
-            box-shadow: none !important; /* Remove Bootstrap's focus glow */
-            width: 150px; /* Increased width */
-            padding: 0;
+            background: transparent;
+            border: 1px solid white;
+            border-radius: 20px 0 0 20px;
+            color: white;
+            padding: 0.3rem 1rem;
+            width: 150px;
+            border-right: none;
+            outline: none;
         }
 
-            .search-input::placeholder {
-                color: #aaa;
-            }
-
-        .btn-search {
-            background-color: #00ff48;
-            color: #000;
-            border: none;
-            border-radius: 50%; /* Make it circular */
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0;
-            transition: background-color 0.2s ease;
+        .search-button {
+            background-color: #00b333;
+            border: 1px solid #00b333;
+            color: white;
+            border-radius: 0 20px 20px 0;
+            padding: 0.3rem 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.2s;
         }
 
-            .btn-search:hover {
-                background-color: #00cc3c;
-                color: #000;
+            .search-button:hover {
+                background-color: #00ff48;
+                border-color: #00ff48;
             }
-        /* --- END OF SEARCH STYLES --- */
 
         /* Footer */
         footer {
@@ -267,21 +473,17 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="Profile" asp-action="Index">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" asp-controller="About" asp-action="Index">About</a></li>
+                <ul class="navbar-nav align-items-center">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Index">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="About">About</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Car" asp-action="Index">Cars</a></li>
                     <li class="nav-item"><a class="nav-link" asp-controller="Contact" asp-action="Index">Contact</a></li>
                 </ul>
-                <!-- === UPDATED SEARCH FORM === -->
-                <form asp-controller="Car" asp-action="Index" method="get" class="d-flex">
-                    <div class="search-container ms-3">
-                        <input name="SearchInput" class="form-control search-input" type="text" placeholder="Search by model...">
-                        <button type="submit" class="btn btn-search">
-                            <i class="fa fa-search"></i>
-                        </button>
-                    </div>
+                <form asp-controller="Car" asp-action="Index" method="get" class="search-form ms-3">
+                    <input name="SearchInput" class="search-input" id="SearchInput" type="text" placeholder="Search by Model...">
+                    <button type="submit" class="search-button">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </form>
             </div>
         </div>
@@ -303,7 +505,7 @@
                     <h5>Home</h5>
                     <ul class="list-unstyled">
                         <li><a asp-controller="Profile" asp-action="Index">Profile</a></li>
-                        <li><a asp-controller="About" asp-action="Index">About</a></li>
+                        <li><a asp-controller="Home" asp-action="About">About</a></li>
                         <li><a asp-controller="Car" asp-action="Index">Cars</a></li>
                         <li><a asp-controller="Contact" asp-action="Index">Contact</a></li>
                     </ul>
@@ -326,14 +528,16 @@
                     </ul>
                 </div>
             </div>
-            <div class="text-center text-muted mt-3">
+            <div class="text-center text-muted mt-3">   
                 Website Designed by <strong>Eng. Kenzy Eslam</strong>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    @RenderSection("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
+    <script src="~/js/site.js" asp-append-version="true"></script>
 </body>
 </html>
+
 
