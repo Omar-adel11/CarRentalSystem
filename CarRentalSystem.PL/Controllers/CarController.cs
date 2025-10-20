@@ -5,8 +5,10 @@ using CarRentalSystem.DAL.Models;
 using Microsoft.AspNetCore.Mvc;
 using CarRentalSystem.PL.DTO;
 using CarRentalSystem.PL.Services;
+using Microsoft.AspNetCore.Authorization;
 namespace CarRentalSystem.PL.Controllers
 {
+    [Authorize]
     public class CarController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

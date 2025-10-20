@@ -1,0 +1,149 @@
+﻿@model SignInDTO
+@{
+    // This line ensures no layout is used
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <style>
+        /* All custom styles for the dark theme are embedded here */
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 30px 40px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .auth-header {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 30px;
+            color: #e0e0e0;
+            text-align: center;
+        }
+
+            .auth-header .p-prefix {
+                color: #4CAF50;
+            }
+
+        .form-group label, .form-check-label, label {
+            color: #b0b0b0;
+            margin-bottom: 5px;
+            display: block;
+            font-size: 0.9em;
+        }
+
+        .form-control {
+            background-color: #2b2b2b;
+            border: 1px solid #444;
+            color: #e0e0e0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+            .form-control:focus {
+                background-color: #2b2b2b;
+                border-color: #4CAF50;
+                box-shadow: 0 0 0 0.2rem rgba(76, 175, 80, 0.25);
+                color: #e0e0e0;
+            }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            border-color: #4CAF50;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .form-check-input {
+            background-color: #333;
+            border: 1px solid #555;
+        }
+
+            .form-check-input:checked {
+                background-color: #4CAF50;
+                border-color: #4CAF50;
+            }
+
+        .auth-link {
+            color: #b0b0b0;
+            text-decoration: none;
+            font-size: 0.9em;
+        }
+
+            .auth-link:hover {
+                color: #4CAF50;
+                text-decoration: underline;
+            }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <span class="p-prefix">W</span>elcome Back
+        </header>
+
+        <form asp-controller="Account" asp-action="SignIn" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email"></label>
+                <input asp-for="Email" class="form-control" placeholder="username@email.com" autofocus />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" type="password" class="form-control" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" asp-for="RememberMe">
+                    <label class="form-check-label" asp-for="RememberMe"></label>
+                </div>
+                <div>
+                    <a asp-controller="Account" asp-action="ForgotPassword" class="auth-link">Forgot Password?</a>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary w-100">Sign In</button>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="mb-0" style="color: #b0b0b0;">Don't have an account? <a asp-controller="Account" asp-action="SignUp" class="auth-link fw-bold">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+</html>

@@ -1,6 +1,9 @@
 using CarRentalSystem.BLL.Interfaces;
 using CarRentalSystem.BLL.Repos;
 using CarRentalSystem.DAL.Data.Contexts;
+using CarRentalSystem.DAL.Models;
+using CarRentalSystem.PL.DTO.Mapping;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalSystem.PL
@@ -21,6 +24,19 @@ namespace CarRentalSystem.PL
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            builder.Services.AddIdentity<AppUser,IdentityRole>()
+                .AddEntityFrameworkStores<CarDbContexts>()
+                .AddDefaultTokenProviders();
+
+            builder.Services.AddAutoMapper(m=>m.AddProfile(new UserProfile()));
+
+            builder.Services.ConfigureApplicationCookie(config =>
+            {
+                config.LoginPath = "/Account/SignIn";
+                config.LogoutPath = "/Account/SignOut";
+                config.AccessDeniedPath = "/Account/AccessedDenied";
+            });
 
             var app = builder.Build();
 
