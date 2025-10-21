@@ -1,8 +1,11 @@
-﻿using AutoMapper;
+﻿using System.Security.Policy;
+using AutoMapper;
 using CarRentalSystem.DAL.Models;
 using CarRentalSystem.PL.DTO;
+using CarRentalSystem.PL.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CarRentalSystem.PL.Controllers
 {
@@ -71,6 +74,83 @@ namespace CarRentalSystem.PL.Controllers
                 }
             }
             return View(model);
+        }
+        #endregion
+
+        public async Task<IActionResult> Profile()
+        {
+            // Get the currently logged-in user
+            var user = await _userManager.GetUserAsync(User);
+
+            if (user == null)
+            {
+                // If no user is logged in, redirect to SignIn
+                return RedirectToAction("SignIn");
+            }
+
+            // Map AppUser to your Profile DTO (if you have one)
+            var profileDto = _mapper.Map<ProfileDTO>(user);
+
+            // Send it to the view
+            return View(profileDto);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdatePersonalInfo(ProfileDTO model)
+        {
+            // First, check if the model state is valid
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.GetUserAsync(User);
+                if (user == null)
+                {
+                    return NotFound(); // Or handle the error appropriately
+                }
+
+                if (user.PictureURL is not null && model.Image is not null)
+                {
+                    DocumentSettings.DeleteFile(model.PictureURL, "UsersImages");
+                }
+
+                if (model.Image is not null)
+                {
+                    model.PictureURL = DocumentSettings.UploadFile(model.Image, "UsersImages");
+                    user.PictureURL = model.PictureURL;
+                }
+
+
+              
+
+                // Map the updated information from the model to the user entity
+                user.UserName = model.Username;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Email = model.Email; // Be careful allowing email changes, it might need re-verification
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.CreditCardNumber = model.CreditCardNumber; // Re-read security warnings about this
+                user.DateOfBirth = model.DateOfBirth;
+                user.Gender = model.Gender;
+
+                // Save the changes to the database
+                await _userManager.UpdateAsync(user);
+
+                // Add a success message to show after redirecting
+                TempData["StatusMessage"] = " Your profile has been updated successfully!";
+        
+        // **THE MAIN FIX: Redirect to the GET action**
+        return RedirectToAction("Profile");
+            }
+
+            // If ModelState is not valid, return the view with the current data and validation errors
+            return View("Profile", model);
+        }
+
+
+        #region SignOut
+        public async Task<IActionResult> SignOut()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("SignIn");
         }
         #endregion
     }

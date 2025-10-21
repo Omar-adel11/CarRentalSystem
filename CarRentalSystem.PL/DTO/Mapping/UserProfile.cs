@@ -8,6 +8,8 @@ namespace CarRentalSystem.PL.DTO.Mapping
         public UserProfile()
         {
             CreateMap<SignUpDTO, AppUser>().ReverseMap();
+            CreateMap<SignInDTO, AppUser>().ReverseMap();
+            CreateMap<ProfileDTO, AppUser>().ReverseMap();
         }
     }
 }
