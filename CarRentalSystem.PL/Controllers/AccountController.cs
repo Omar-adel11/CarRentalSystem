@@ -4,12 +4,13 @@ using CarRentalSystem.DAL.Models;
 using CarRentalSystem.PL.DTO;
 using CarRentalSystem.PL.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace CarRentalSystem.PL.Controllers
 {
-    public class AccountController(IMapper _mapper, UserManager<AppUser> _userManager,SignInManager<AppUser> _signInManager) : Controller
+    public class AccountController(IEmailSender _emailSender,ISMSTwilio _SMSTwilio,IConfiguration _configuration,IMapper _mapper, UserManager<AppUser> _userManager,SignInManager<AppUser> _signInManager) : Controller
     {
         #region SignUp
         [HttpGet]
@@ -77,6 +78,7 @@ namespace CarRentalSystem.PL.Controllers
         }
         #endregion
 
+        #region Profile
         public async Task<IActionResult> Profile()
         {
             // Get the currently logged-in user
@@ -118,7 +120,7 @@ namespace CarRentalSystem.PL.Controllers
                 }
 
 
-              
+
 
                 // Map the updated information from the model to the user entity
                 user.UserName = model.Username;
@@ -136,15 +138,15 @@ namespace CarRentalSystem.PL.Controllers
 
                 // Add a success message to show after redirecting
                 TempData["StatusMessage"] = " Your profile has been updated successfully!";
-        
-        // **THE MAIN FIX: Redirect to the GET action**
-        return RedirectToAction("Profile");
+
+                // **THE MAIN FIX: Redirect to the GET action**
+                return RedirectToAction("Profile");
             }
 
             // If ModelState is not valid, return the view with the current data and validation errors
             return View("Profile", model);
-        }
-
+        } 
+        #endregion
 
         #region SignOut
         public async Task<IActionResult> SignOut()
@@ -152,6 +154,111 @@ namespace CarRentalSystem.PL.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("SignIn");
         }
+        #endregion
+
+        #region Forget Password
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    // Generate password reset token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    // Create reset link (in a real app, you'd send this via email)
+                    //var resetLink = Url.Action("ResetPassword", "Account", new { email = model.Email, token = token }, Request.Scheme);
+                    var OTP = new Random().Next(100000, 999999).ToString();
+                    user.PasswordResetOTP = OTP;
+                    user.OTPExpirationTime = DateTime.Now.AddMinutes(5);
+                    await _userManager.UpdateAsync(user);
+                    if (model.SMSOrEmail == "Email")
+                    {
+                        //Send the OTP via email 
+
+                        _emailSender.SendEmailAsync(model.Email, "Password Reset OTP", $"Your OTP is: {OTP}");
+                    }
+                    else
+                    {
+                        //Send SMS via Twilio 
+                        
+                        var msg = _SMSTwilio.SendSMS(user.PhoneNumber, $"Your OTP is: {OTP}");
+                        
+
+                    }
+                        TempData["Email"] = model.Email;
+                        return View("CheckOTP");
+                }
+                ModelState.AddModelError(string.Empty, "Email not found");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        public IActionResult CheckOTP()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CheckOTP(OTP model)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = model.Email ;
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user != null)
+                {
+                    if (user.PasswordResetOTP == model.Code && user.OTPExpirationTime > DateTime.Now)
+                    {
+                        user.PasswordResetOTP = null;
+                        user.OTPExpirationTime = null;
+                        await _userManager.UpdateAsync(user);
+
+                        TempData["Email"] = email;
+                        return View("ResetPassword");
+                    }
+                    ModelState.AddModelError(string.Empty, "Invalid or expired OTP");
+                }
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public IActionResult ResetPassword()
+        {
+            var email = TempData["Email"] as string;
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = model.Email;
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user != null)
+                {
+                    var resetPassResult = await _userManager.ResetPasswordAsync(user, await _userManager.GeneratePasswordResetTokenAsync(user), model.NewPassword);
+                    if (resetPassResult.Succeeded)
+                    {
+                        
+                        await _userManager.UpdateAsync(user);
+                        return RedirectToAction("SignIn");
+                    }
+                    foreach (var error in resetPassResult.Errors)
+                    {
+                        ModelState.AddModelError(string.Empty, error.Description);
+                    }
+                }
+            }
+            return View(model);
+        }
+
         #endregion
     }
 }

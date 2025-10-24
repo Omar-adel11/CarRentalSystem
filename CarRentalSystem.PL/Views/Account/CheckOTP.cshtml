@@ -1,0 +1,44 @@
+﻿@model OTP
+@{
+    ViewData["Title"] = "CheckOTP";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+	string Email = TempData["Email"]?.ToString();
+}
+
+<body>
+    <div class="auth-container">
+        <header class="auth-header">
+            <span class="p-prefix">W</span>elcome Back
+        </header>
+
+        <form asp-controller="Account" asp-action="CheckOTP" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            <input type="hidden" asp-for="Email" value="@TempData["Email"]" />
+
+            <div class="form-group mb-3">
+                <label asp-for="Code"></label>
+                <input asp-for="Code" class="form-control" placeholder="" autofocus />
+                <span asp-validation-for="Code" class="text-danger"></span>
+            </div>
+            
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary w-100">Send</button>
+            </div>
+
+            <div class="text-center mt-4">
+                <p class="mb-0" style="color: #b0b0b0;">Already have an account? <a asp-controller="Account" asp-action="SignIn" class="auth-link fw-bold">Sign In</a></p>
+            </div>
+            <div class="text-center mt-4">
+                <p class="mb-0" style="color: #b0b0b0;">Don't have an account? <a asp-controller="Account" asp-action="SignUp" class="auth-link fw-bold">Sign Up</a></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+</body>
+
+

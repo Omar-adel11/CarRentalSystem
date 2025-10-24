@@ -21,5 +21,9 @@ namespace CarRentalSystem.DAL.Models
         public string? CreditCardNumber { get; set; }
         public string? Address { get; set; }
         public string? PictureURL { get; set; }
+
+        // Add these for OTP
+        public string? PasswordResetOTP { get; set; }
+        public DateTime? OTPExpirationTime { get; set; }
     }
 }

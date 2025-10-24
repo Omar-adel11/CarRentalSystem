@@ -3,7 +3,9 @@ using CarRentalSystem.BLL.Repos;
 using CarRentalSystem.DAL.Data.Contexts;
 using CarRentalSystem.DAL.Models;
 using CarRentalSystem.PL.DTO.Mapping;
+using CarRentalSystem.PL.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarRentalSystem.PL
@@ -37,6 +39,10 @@ namespace CarRentalSystem.PL
                 config.LogoutPath = "/Account/SignOut";
                 config.AccessDeniedPath = "/Account/AccessedDenied";
             });
+
+            
+            builder.Services.AddScoped<IEmailSender, EmailSettings>();
+            builder.Services.AddScoped<ISMSTwilio, SMSTwilio>();
 
             var app = builder.Build();
 
